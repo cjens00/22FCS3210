@@ -1,7 +1,7 @@
 /*
  * CS3210 - Principles of Programming Languages - Fall 2022
  * Instructor: Thyago Mota
- * Student: 
+ * Student: Cameron Jensen
  * Description: Homework 02 - Diamond Problem
  */
 
@@ -77,7 +77,7 @@ class MultifunctionPrinter: public Printer, public Scanner {
 
 ostream& operator<<(ostream& os, const MultifunctionPrinter& multifunctionPrinter)
 {
-    os << multifunctionPrinter.manufacturer << ", " << multifunctionPrinter.type << ", " << multifunctionPrinter.dpi;
+    os << multifunctionPrinter.Printer::manufacturer << ", " << multifunctionPrinter.type << ", " << multifunctionPrinter.dpi;
     return os;
 }
 
