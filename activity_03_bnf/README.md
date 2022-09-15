@@ -21,23 +21,44 @@ Say yes/no whether each word can be generated from the grammar above.
 IF ($A <> B2 ; A2 ; $B3) 
 ```
 
+NO!
+
 ### b)  
 
 ```
 IF (IF (B2 <> B1 ; E5 ; D2) ; A2 ; B3) 
 ```
 
+NO!
+
 ### c)
 
 ```
 IF ($A5 <> B2 ; A2 ; B3) 
 ```
+IF -> ´IF´ ´(´ BL ´;´ AR ´;´ AR ´)´ ->
+´IF´ ´(´ CL ´<>´ CL  ´;´ AR ´;´ AR ´)´ ->
+´IF´ ´(´ ´$´ LT DG ´<>´ CL  ´;´ AR ´;´ AR ´)´ ->
+´IF´ ´(´ ´$´ ´A´ DG ´<>´ CL  ´;´ AR ´;´ AR ´)´ ->
+´IF´ ´(´ ´$´ ´A´ 5 ´<>´ CL  ´;´ AR ´;´ AR ´)´ ->
+´IF´ ´(´ ´$´ ´A´ 5 ´<>´ LT DG ´;´ AR ´;´ AR ´)´ ->
+´IF´ ´(´ ´$´ ´A´ 5 ´<>´ B DG ´;´ AR ´;´ AR ´)´ ->
+´IF´ ´(´ ´$´ ´A´ 5 ´<>´ B 2 ´;´ AR ´;´ AR ´)´ ->
+´IF´ ´(´ ´$´ ´A´ 5 ´<>´ B 2 ´;´ CL ´;´ AR ´)´ ->
+´IF´ ´(´ ´$´ ´A´ 5 ´<>´ B 2 ´;´ LT DG ´;´ AR ´)´ ->
+´IF´ ´(´ ´$´ ´A´ 5 ´<>´ B 2 ´;´ ´A´ DG ´;´ AR ´)´ ->
+´IF´ ´(´ ´$´ ´A´ 5 ´<>´ B 2 ´;´ ´A´ 2 ´;´ AR ´)´ ->
+´IF´ ´(´ ´$´ ´A´ 5 ´<>´ B 2 ´;´ ´A´ 2 ´;´ LT DG ´)´ ->
+´IF´ ´(´ ´$´ ´A´ 5 ´<>´ B 2 ´;´ ´A´ 2 ´;´ ´B´ DG ´)´ ->
+´IF´ ´(´ ´$´ ´A´ 5 ´<>´ B 2 ´;´ ´A´ 2 ´;´ ´B´ 3 ´)´
 
 ### d)
 
 ```
 IF ($A21 <> B3 ; A2 ; IF (B2 <> B1 ; E5 ; D2)) 
 ```
+
+YES!
  
 ## Q2
 
@@ -60,6 +81,29 @@ G = (V, T, P, S), where:
 
 Make sure that P has one production per line and no extended BNF notation; you can stop when you reach productions LT and DG. 
 
+```
+IF = ´IF´ ´(´ BL ´;´ AR ´;´ AR ´)´ 
+BL = CL ´>´ CL 
+BL = CL ´>=´ CL
+BL = CL ´<´ CL
+BL = CL ´<=´ CL
+BL = CL ´==´ CL
+BL = CL ´<>>´ CL
+AR = CL 
+AR = CL ´+´ CL 
+AR = CL ´-´ CL 
+AR = CL ´*´ CL 
+AR = CL ´/´ CL 
+AR = IF
+CL = LT DG' 
+CL = ´$´ LT DG' 
+CL = LT ´$´ DG' 
+CL = ´$´ LT ´$´ DG' 
+DG' = DG DG' | DG 
+LT = ´A´ | ´B´ | ´C´ | ´D´ | ´E´ 
+DG = ´0´ | ´1´ | ´2´ | ´3´ | ´4´ | ´5´ | ´6´ | ´7´ | ´8´ | ´9´ 
+```
+
 ## Q4 
 
 Rewrite the grammar below in a more compact way using EBNF. 
@@ -70,3 +114,12 @@ num    = digits | digits ´.´ digits
 digits = digit | digit digits 
 digit  = ´0´ | ´1´ | ´2´ | ´3´ | ´4´ | ´5´ | ´6´ | ´7´ | ´8´ | ´9´ 
 ``` 
+
+Solution:
+```
+expr   = [ ´-´ ] num 
+num    = digits [ ´.´ digits ]
+digits = digit { digit }
+digit  = ´0´ | ´1´ | ´2´ | ´3´ | ´4´ | ´5´ | ´6´ | ´7´ | ´8´ | ´9´ 
+``` 
+
