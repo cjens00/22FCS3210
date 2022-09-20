@@ -1,0 +1,11 @@
+; CS3210 - Principles of Programming Languages - Fall 2022
+; Instructor: Thyago Mota
+; Description: reads two numbers and tells which one is greater than the other
+
+A "A? " ? =  ; reads an integer from the user, saving it in variable A
+B "B? " ? =  ; reads an integer from the user, saving it in variable B
+A. B. >  [ A. ! " > "  B. ! ]
+A. B. <  [ A. ! " < "  B. ! ]
+A. B. == [ A. ! " == " B. ! ]
+
+$$

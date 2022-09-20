@@ -1,0 +1,26 @@
+; CS3210 - Principles of Programming Languages - Fall 2022
+; Instructor: Thyago Mota
+; Description: reads N (at least 0) and displays N!
+
+(
+    N "N? " ? =
+    N. 0 < [ "N has to be at least 0!" ]
+    N. 0 >= ^
+)
+
+; special case when N=0
+N. 0 == [ "0! = 1" ]
+
+; all other cases
+N. 0 > [
+    i 2 =
+    F 1 =
+    (
+        i. N. > ^
+        F F. i. * =
+        i i. 1 + =
+    )
+    N.! "! = " F.!
+]
+
+$$

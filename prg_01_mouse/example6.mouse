@@ -1,0 +1,17 @@
+; CS3210 - Principles of Programming Languages - Fall 2022
+; Instructor: Thyago Mota
+; Description: a simple count from 1 to N
+
+N "N? " ? =       ; reads the value of N
+
+N. 1 < [ "N has to be at least 1!" ]
+N. 1 >= [
+    i 1 =             ; initialize counter variable
+    (
+        i. N. > ^     ; checks if counter reached N
+        i. ! " "      ; displays counter
+        i i. 1 + =    ; increments counter
+    )
+]
+
+$$

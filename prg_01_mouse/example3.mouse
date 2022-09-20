@@ -1,0 +1,10 @@
+; CS3210 - Principles of Programming Languages - Fall 2022
+; Instructor: Thyago Mota
+; Description: reads a number and tells if the number is odd or even
+
+N "N? " ? =                   ; reads an integer from the user, saving it in variable N
+N .                           ; pushes the value of N onto the stack
+N . 2 % [ ! " is odd!" ]      ; pushes the value of N again and checks if it's odd
+N . 1 + 2 % [ ! " is even!" ] ; pushes the value of N again and checks if it's even
+
+$$

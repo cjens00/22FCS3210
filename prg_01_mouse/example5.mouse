@@ -1,0 +1,24 @@
+; CS3210 - Principles of Programming Languages - Fall 2022
+; Instructor: Thyago Mota
+; Description: reads three numbers and tells which is one is the greatest
+
+A "A? " ? =
+B "B? " ? =
+C "C? " ? =
+
+; is A the greatest?
+A. B. >=  [
+    A. C. >= [ A. ! " is the greatest!" ]
+]
+
+; is B the greatest?
+B. A. >=  [
+    B. C. >= [ B. ! " is the greatest!" ]
+]
+
+; is C the greatest?
+C. A. >=  [
+    C. B. >= [ B. ! " is the greatest!" ]
+]
+
+$$

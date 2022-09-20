@@ -1,0 +1,7 @@
+; CS3210 - Principles of Programming Languages - Fall 2022
+; Instructor: Thyago Mota
+; Description: simple input and output
+
+N "N? " ? =    ; reads an integer from the user, saving it in variable N
+"N is " N . !  ; displays the value of variable N
+$$

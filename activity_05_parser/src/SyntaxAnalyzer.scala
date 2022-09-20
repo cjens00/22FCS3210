@@ -41,57 +41,104 @@ class SyntaxAnalyzer(private var source: String) {
   // expression  = term expression'
   private def parseExpr(): Node = {
 
-    // TODO: create a new (tree) node with lexeme-label "expression"
+    // TODOd: create a new (tree) node with lexeme-label "expression"
+    val node = new Node(new Lexeme("expression"))
 
-    // TODO: parse a term
+    // TODOd: parse a term and add the returned node as a branch
+    node.add(parseTerm())
 
-    // TODO: parse an expressionPrime
+    // TODOd: parse an expressionPrime
+    node.add(parseExprPrime())
 
-    // TODO: return the (tree) node created
+    // TODOd: return the (tree) node created
+    node
   }
 
   // term = factor term'
   private def parseTerm(): Node = {
 
-    // TODO: create a new (tree) node with lexeme-label "term"
+    // TODOd: create a new (tree) node with lexeme-label "term"
+    val node = new Node(new Lexeme("term"))
 
-    // TODO: parse a factor
+    // TODOd: parse a factor
+    node.add(parseFactor())
 
-    // TODO: parse a termPrime
+    // TODOd: parse a termPrime
+    node.add(parseTermPrime())
 
-    // TODO: return the (tree) node created
+    // TODOd: return the (tree) node created
+    node
   }
 
   // factor = identifier | literal | ´(´ expression ´)´
   private def parseFactor(): Node = {
 
-    // TODO: create a new (tree) node with lexeme-label "factor"
+    // TODOd: create a new (tree) node with lexeme-label "factor"
+    val node = new Node(new Lexeme("factor"))
 
-    // TODO: decide whether to add identifier, literal or expression in parentheses branches
+    // TODOd: decide whether to add identifier, literal or expression in parentheses branches
+    if (getLexeme.token == Token.IDENTIFIER || getLexeme.token == Token.LITERAL) {
+      node.add(new Node(getLexeme))
+      nextLexeme // don't forget to consume the lexeme!!!
+    }
+    else if (getLexeme.token == Token.OPEN_PAR) {
+      node.add(new Node(getLexeme))
+      nextLexeme // consuming the open par.
+      node.add(parseExpr())
+      if (getLexeme.token == Token.CLOSE_PAR) {
+        node.add(new Node(getLexeme))
+        nextLexeme // consuming the close par.
+      }
+      else
+        throw new Error("Closing ')' expected!")
+    }
+    else
+      throw new Error("Identifier, or literal, or opening '(' expected!")
 
-    // TODO: return the (tree) node created
+    // TODOd: return the (tree) node created
+    node
   }
 
   // term' = ( ´*´ | ´/´ ) factor term' | epsilon
   def parseTermPrime(): Node = {
 
-    // TODO: create a new (tree) node with lexeme-label "term"
+    // TODOd: create a new (tree) node with lexeme-label "term"
+    val node = new Node(new Lexeme("term'"))
 
-    // TODO: add as many multiplication or division branches followed by a factor;
+    // TODOd: add as many multiplication or division branches followed by a factor;
     // use epsilon production as the base-case
+    if (getLexeme.token == Token.MULTIPLICATION || getLexeme.token == Token.DIVISION) {
+      node.add(new Node(getLexeme))
+      nextLexeme // don't forget to consume the lexeme!!!
+      node.add(parseFactor())
+      node.add(parseTermPrime())
+    }
+    else
+      node.add(new Node(new Lexeme("epsilon")))
 
-    // TODO: return the (tree) node created
+    // TODOd: return the (tree) node created
+    node
   }
 
   // expression' = ( ´+´  | ´-´ ) term expression' | epsilon
   def parseExprPrime(): Node = {
 
-    // TODO: create a new (tree) node with lexeme-label "expression"
+    // TODOd: create a new (tree) node with lexeme-label "expression"
+    val node = new Node(new Lexeme("expression'"))
 
-    // TODO: add as many addition or subtraction branches followed by a term;
+    // TODOd: add as many addition or subtraction branches followed by a term;
     // use epsilon production as the base-case
+    if (getLexeme.token == Token.ADDITION || getLexeme.token == Token.SUBTRACTION) {
+      node.add(new Node(getLexeme))
+      nextLexeme // don't forget to consume the lexeme!!!
+      node.add(parseTerm())
+      node.add(parseExprPrime())
+    }
+    else
+      node.add(new Node(new Lexeme("epsilon")))
 
-    // TODO: return the (tree) node created
+    // TODOd: return the (tree) node created
+    node
   }
 }
 

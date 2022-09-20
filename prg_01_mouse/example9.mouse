@@ -1,0 +1,6 @@
+; CS3210 - Principles of Programming Languages - Fall 2022
+; Instructor: Thyago Mota
+; Description: computes nCk (number of ways to select r items from a set of n items where the order of selection does not matter).
+; Student(s) Name(s):
+
+$$

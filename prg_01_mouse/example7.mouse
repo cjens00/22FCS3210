@@ -1,0 +1,29 @@
+; CS3210 - Principles of Programming Languages - Fall 2022
+; Instructor: Thyago Mota
+; Description: reads N and M (both at least 1) and displays all (i, j) combinations, with i in N and j in M
+
+(
+    N "N? " ? =
+    N. 1 < [ "N has to be at least 1!" ]
+    N. 1 >= ^
+)
+
+(
+    M "M? " ? =
+    M. 1 < [ "M has to be at least 1!" ]
+    M. 1 >= ^
+)
+
+i 1 =
+(
+    i. N. > ^
+    j 1 =
+    (
+        j. M. > ^
+        "(" i.! "," j.! ") "
+        j j. 1 + =
+    )
+    i i. 1 + =
+)
+
+$$
