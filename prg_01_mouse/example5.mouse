@@ -18,7 +18,7 @@ B. A. >=  [
 
 ; is C the greatest?
 C. A. >=  [
-    C. B. >= [ B. ! " is the greatest!" ]
+    C. B. >= [ C. ! " is the greatest!" ]
 ]
 
 $$

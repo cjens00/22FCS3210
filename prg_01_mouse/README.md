@@ -15,7 +15,9 @@ digit         = ´0´ | nonzero
 if            = ´[´ { line } ´]´ 
 while         = ´(´ { line } ´)´ 
 letter        = ´a´ | ´b´ | ´c´ | ´d´ | ´e´ | ´f´ | ´g´ | ´h´ | ´i´ | ´j´ | ´k´ | ´l´ | ´m´ | ´n´ | ´o´ | ´p´ | ´q´ | ´r´ | ´s´ | ´t´ | ´u´ | ´v´ | ´x´ | ´y´ | ´w´ | ´z´ | ´A´ | ´B´ | ´C´ | ´D´ | ´E´ | ´F´ | ´G´ | ´H´ | ´I´ | ´J´ | ´K´ | ´L´ | ´M´ | ´N´ | ´O´ | ´P´ | ´Q´ | ´R´ | ´S´ | ´T´ | ´U´ | ´V´ | ´X´ | ´Y´ | ´W´ | ´Z´ 
+character     = letter | digit | ´ ´ | ´,´ | ´;´ | ´-´ | ´:´ | ´'´ | ´(´ | ´)´ | ´[´ | ´]´
 ```
+
 
 As described by Mouse's EBNF above, a Mouse program is made of lines (comments or statements) followed by an end-of-program symbol ($$). A comment begins with a semicolon and must end with a new line. The semantics in Mouse is better understood by how they affect memory and a stack.  
 
