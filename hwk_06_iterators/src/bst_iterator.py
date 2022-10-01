@@ -2,17 +2,17 @@
 CS3210 - Principles of Programming Languages - Fall 2022
 Instructor: Thyago Mota
 Description: Homework 06 - An iterator for a BST (Binary Search Tree)
-Student Name:
+Student Name: Cameron Jensen
 '''
 
 class BST: 
 
     # the labels for the nodes are obtained from a list of strings
     def __init__(self, labels): 
-        if (not isinstance(labels, list)):
-            raise Exception("labels must be a list!")
-        if (not labels):
-            raise Exception("labels must not be empty!")
+        if not isinstance(labels, list):
+            raise Exception("Labels must be a list!")
+        if not labels:
+            raise Exception("Labels must not be empty!")
         self.label = labels[0] # first label makes the root node 
         self.left = None
         self.right = None        
@@ -21,13 +21,13 @@ class BST:
 
     # adds a node with the given label to the BST using recursion
     def _add(node, label):
-        if (label < node.label):
-            if (node.left):
+        if label < node.label:
+            if node.left:
                 BST._add(node.left, label)
             else:
                 node.left = BST([label])
         else:
-            if (node.right):
+            if node.right:
                 BST._add(node.right, label)
             else:
                 node.right = BST([label])
@@ -35,7 +35,7 @@ class BST:
     # helper method that builds a string representation of the BST using recursion
     def _print(node, tabs = ""): 
         out = ""
-        if (node):
+        if node:
             out += tabs + node.label + "\n"
             if node.left:
                 out += BST._print(node.left, tabs + "   ")
@@ -47,27 +47,37 @@ class BST:
         return BST._print(self, "")
 
     # helper method that builds a list with the elements of the BST in in-order order using recursion
-    def _in_order(node): 
+    def _in_order(node):
         nodes = []
-        if (node):
-            if (node.left):
+        if node:
+            if node.left:
                 nodes += BST._in_order(node.left)
             nodes.append(node.label)
-            if (node.right):
+            if node.right:
                 nodes += BST._in_order(node.right)
         return nodes
     
-    # TODO #1: return an iterator for BST; hint: use _in_order to build a list with the (node) elements; then return "self"
+    # Done #1
     def __iter__(self):
-        return None
+        self._iter_elements = BST._in_order(self)
+        return self
 
-    # TODO #2: return the label of the first element from the list that you built in __iter__, updating the list before returning; hint: don't worry if the list is empty (the exception that is going to be thrown is used to notify that there are no more elements to return)
+    # Done #2
     def __next__(self):
-        return None
+        if len(self._iter_elements) == 0:
+            raise StopIteration
+        label = self._iter_elements[0]
+        self._iter_elements = self._iter_elements[1:]
+        return label
 
-# the code below builds and prints a tree using the given labels
-tree = BST(["b", "a", "d", "c", "e"])
-print("Tree:")
-print(tree)
+if __name__ == "__main__":
+    # the code below builds and prints a tree using the given labels
+    tree = BST(["b", "a", "d", "c", "e"])
+    print("Tree:")
+    print(tree)
 
-# TODO #3: use the iterator that you created to show the labels of the elements of the tree
+    # Done #3
+    nodes_as_string = ""
+    for x in tree:
+        nodes_as_string += str(x + " ")
+    print(nodes_as_string)
