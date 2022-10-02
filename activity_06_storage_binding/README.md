@@ -4,3 +4,5 @@ Consider the [Die.java](src/Die.java) class and classify each of its variables (
 * stack-dynamic
 * explicit heap-dynamic
 * implicit heap-dynamic
+
+Extra practice: [Sandwich.java](src/Sandwich.java). 
