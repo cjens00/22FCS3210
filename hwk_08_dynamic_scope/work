@@ -1,0 +1,49 @@
+// main program
+function main() {
+    var x; 
+    var y; 
+    var z;
+
+    function sub1() {
+        var a;
+        var y;
+        var z;
+    }
+
+    function sub2() {
+        var a;
+        var b;
+        var z;
+    }
+
+    function sub3() {
+        var a;
+        var x;
+        var w;
+    }
+}
+
+
+
+// main->sub3->sub1
+//     main
+//     x,y,z
+//         sub3
+//         a,x,w
+//             sub1
+//             a,y,z
+//
+// a (sub1), b ("not visible"), x (sub3), y (sub1), z (sub1), w (sub3)
+
+
+// e) main calls sub1; sub1 calls sub3; sub3 calls sub2. 
+// main->sub1->sub3->sub2
+
+
+// a (sub2), b (sub2), x (sub3), y (sub1), z (sub2), w (sub3) 
+
+
+// f) main calls sub3; sub3 calls sub2; sub2 calls sub1.  
+// main->sub3->sub2->sub1
+
+// a (sub1), b (sub2), x (sub3), y (sub1), z (sub1), w (sub3) 

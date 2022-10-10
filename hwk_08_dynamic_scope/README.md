@@ -1,5 +1,5 @@
 # Instructions
-
+Student Name: Cameron Jensen
 Consider the following JavaScript-like program to answer the items below. Note: this is the same code from activity 07 (question 2). 
 
 ```
@@ -28,15 +28,15 @@ Note that those items match items d, e, and f (from activity 07, question 2). He
 
 d) main calls sub3; sub3 calls sub1.  
 
-a (), b (), x (), y (), z (), w () 
+a (sub1), b ("not visible"), x (sub3), y (sub1), z (sub1), w (sub3)
 
 e) main calls sub1; sub1 calls sub3; sub3 calls sub2. 
 
-a (), b (), x (), y (), z (), w () 
+a (sub2), b (sub2), x (sub3), y (sub1), z (sub2), w (sub3)
  
 f) main calls sub3; sub3 calls sub2; sub2 calls sub1.  
 
-a (), b (), x (), y (), z (), w () 
+a (sub1), b (sub2), x (sub3), y (sub1), z (sub1), w (sub3)
 
 # Submission
 
