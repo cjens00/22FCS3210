@@ -9,6 +9,7 @@ object ScalaBasics {
 
   def main(args: Array[String]): Unit = {
 
+    println("fdgfhg")
     // TODO #1: declare an integer constant named MAX and set it to 10; declare an integer variable named sum and initialized it to 0
 
 

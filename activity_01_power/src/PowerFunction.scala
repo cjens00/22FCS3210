@@ -12,7 +12,7 @@ object PowerFunction {
   // 1/x^(-n) if n is negative
   // 1 if n is 0
   def power(x: Double, n: Int): Double = {
-    
+    return 1.0
   }
 
   def main(args: Array[String]): Unit = {

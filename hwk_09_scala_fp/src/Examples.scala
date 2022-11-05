@@ -32,21 +32,22 @@ object Examples {
     (1 until m).filter((r: Int) => coprime(m)(r))
 
   // TODO #1: e) write function primeFactors that takes an integer and returns a flat list with the prime factors of the given number in ascending order.
-  def primeFactors(x: Int) = { }
+  def primeFactors(x: Int) = {}
 
   // TODO #2: f) write function primeFactorsMult similar to primeFactors but with the prime factors and their multiplicity.
-  def primeRange(x: Int) = { }
+  def primeRange(x: Int) = {}
 
   // TODO #3: g) write function primesRange that takes a range of integers and returns a list of all prime numbers within that range.
-  def primesRange(a: Int, b: Int) = { }
+  def primesRange(a: Int, b: Int) = {}
 
   // OPTIONAL TODO #1: h) Goldbach's conjecture says that every positive even number greater than 2 is the sum of two prime numbers. Example: 28 = 5 + 23. It is one of the most famous facts in number theory that has not been proved to be correct in the general case. It has been numerically confirmed up to very large numbers. Write function goldbach that takes an integer and returns the two prime numbers that sum up to it.
-  def goldbach(x: Int) = { }
+  def goldbach(x: Int) = {}
 
   // OPTIONAL TODO #2: i) write the function goldbachList that takes a range of integers and returns a list of all even numbers and their Goldbach composition.
-  def goldbachList(a: Int, b: Int) = { }
+  def goldbachList(a: Int, b: Int) = {}
 
   def main(args: Array[String]): Unit = {
-
+    println("hi")
   }
+
 }
