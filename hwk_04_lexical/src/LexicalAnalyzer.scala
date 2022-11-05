@@ -1,12 +1,11 @@
+import scala.io.Source
+
 /*
  * CS3210 - Principles of Programming Languages - Fall 2022
  * Instructor: Thyago Mota
  * Description: Homework 04 - LexicalAnalyzer (an iterable lexical analyzer)
  * Student Name:
  */
-
-import LexicalAnalyzer.{BLANKS, DIGITS, LETTERS, NEW_LINE, PUNCTUATIONS, SPECIALS}
-import scala.io.Source
 
 class LexicalAnalyzer(private var source: String) extends Iterable[Lexeme]{
 
