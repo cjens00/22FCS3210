@@ -7,14 +7,18 @@
 
 object Examples {
 
-  // a) write function isPrime that takes an integer and returns true/false whether the input is a prime number or not.
-  // A prime number (or a prime) is a natural number greater than 1 that is not a product of two smaller natural numbers.
+  // a) write function isPrime that takes an integer and
+  // returns true/false whether the input is a prime number or not.
+  // A prime number (or a prime) is a natural number greater
+  // than 1 that is not a product of two smaller natural numbers.
   def isPrime(x: Int): Boolean = {
-    if (x <= 1) throw new Exception("x has to be >= 1!")
+    if (x <= 1) return false
     !(2 until x).exists(x % _ == 0)
   }
 
-  // b) write function gcd that takes two integers and returns the GCD (Greatest Common Divisor) of the two inputs. Rewrite gcd as gcdC using currying notation.
+  // b) write function gcd that takes two integers and returns the
+  // GCD (Greatest Common Divisor) of the two inputs.
+  // Rewrite gcd as gcdC using currying notation.
   def gcd(a: Int, b: Int): Int = {
     if (a % b == 0) b else gcd(b, a % b)
   }
@@ -23,16 +27,25 @@ object Examples {
     (b: Int) =>
       if (a % b == 0) b else gcdc(b)(a % b)
 
-  // c) write function coprime that takes two integers and returns true/false whether the numbers are coprimes (their GCD equals to 1).
+  // c) write function coprime that takes two integers and returns
+  // true/false whether the numbers are coprimes (their GCD equals to 1).
   def coprime(a: Int) =
     (b: Int) => gcdc(a)(b) == 1
 
-  // d) write function totientPhi that takes an integer m and returns the positive integers r (1 <= r < m) that are coprime to m; challenge: implement totientPhi using until and filter functions.
-  def totientPhi(m: Int) =
+  // d) write function totientPhi that takes an integer m and returns the
+  // positive integers r (1 <= r < m) that are coprime to m;
+  // challenge: implement totientPhi using until and filter functions.
+  def totientPhi(m: Int) = {
     (1 until m).filter((r: Int) => coprime(m)(r))
+  }
 
-  // TODO #1: e) write function primeFactors that takes an integer and returns a flat list with the prime factors of the given number in ascending order.
-  def primeFactors(x: Int) = {}
+  // Takes an integer and returns a flat list with the
+  // prime factors of the given number in ascending order.
+  def primeFactors(x: Int) = {
+    var pFactors = (2 to x).filter(x % _ == 0)
+    pFactors = pFactors.filter(isPrime).toIndexedSeq.sorted
+    pFactors
+  }
 
   // TODO #2: f) write function primeFactorsMult similar to primeFactors but with the prime factors and their multiplicity.
   def primeRange(x: Int) = {}
@@ -47,7 +60,7 @@ object Examples {
   def goldbachList(a: Int, b: Int) = {}
 
   def main(args: Array[String]): Unit = {
-    println("hi")
+    primeFactors(81)
   }
 
 }
