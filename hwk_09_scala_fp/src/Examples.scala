@@ -1,7 +1,7 @@
 /*
  * CS3210 - Principles of Programming Languages - Fall 2022
  * Instructor: Thyago Mota
- * Student: 
+ * Student: Cameron Jensen
  * Description: Homework 09 - Functional Programming Examples
  */
 
@@ -41,17 +41,27 @@ object Examples {
 
   // Takes an integer and returns a flat list with the
   // prime factors of the given number in ascending order.
-  def primeFactors(x: Int) = {
-    var pFactors = (2 to x).filter(x % _ == 0)
-    pFactors = pFactors.filter(isPrime).toIndexedSeq.sorted
-    pFactors
+  // Look up indexed sequence
+  // Flat map just means all lists are flattened into one single list.
+  def primeFactors(x: Int): List[Any] = {
+    if (isPrime(x)) return List(x)
+    if (x % 2 == 0) {
+      List(2, primeFactors(x / 2))
+    } else {
+      var k: Int = 0
+      while (x % (3 + 2 * k) != 0) k += 1
+      List(primeFactors(3 + 2 * k), primeFactors(x / 3 + 2 * k)).flatten
+    }
   }
 
-  // TODO #2: f) write function primeFactorsMult similar to primeFactors but with the prime factors and their multiplicity.
-  def primeRange(x: Int) = {}
+  def primeFactorsMult(x: Int) = {
+    val pFactors = primeFactors(x)
+    pFactors.distinct.flatMap(y => List(y, pFactors.count(y == _)))
+  }
 
-  // TODO #3: g) write function primesRange that takes a range of integers and returns a list of all prime numbers within that range.
-  def primesRange(a: Int, b: Int) = {}
+  def primesRange(a: Int, b: Int) = {
+    (a to b).filter(isPrime)
+  }
 
   // OPTIONAL TODO #1: h) Goldbach's conjecture says that every positive even number greater than 2 is the sum of two prime numbers. Example: 28 = 5 + 23. It is one of the most famous facts in number theory that has not been proved to be correct in the general case. It has been numerically confirmed up to very large numbers. Write function goldbach that takes an integer and returns the two prime numbers that sum up to it.
   def goldbach(x: Int) = {}
@@ -60,7 +70,6 @@ object Examples {
   def goldbachList(a: Int, b: Int) = {}
 
   def main(args: Array[String]): Unit = {
-    primeFactors(81)
   }
 
 }
