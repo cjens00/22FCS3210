@@ -14,8 +14,8 @@ object Sudoku {
   def readBoard(fileName: String): Array[Array[Int]] = {
     val bufferedSource = Source.fromFile(fileName)
     val boardMtx: Array[Array[Int]] = Array.ofDim(9, 9)
-    val validationPattern = "[0-9]{81}".r
     val source = bufferedSource.getLines.mkString.filter(!_.equals(' '))
+    val validationPattern = "[0-9]{81}".r
     source match {
       case validationPattern(_*) =>
         for {
