@@ -15,6 +15,7 @@ object Sudoku {
     val bufferedSource = Source.fromFile(fileName)
     val boardMtx: Array[Array[Int]] = Array.ofDim(boardSize, boardSize)
     val source = bufferedSource.getLines.mkString.filter(!_.equals(' '))
+    // Good spot for a test- check that pattern match is working as expected
     val validationPattern = ("[0-9]" + s"{${math.pow(boardSize, 2).toInt}}").r
     source match {
       case validationPattern(_*) =>
@@ -77,10 +78,19 @@ object Sudoku {
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = null
 
   def main(args: Array[String]): Unit = {
-    val inputFile = "sudoku1.txt"
-    val board = readBoard(inputFile)
-    val sol = solve(board)
-    val boardString = boardToString(board)
-    println(boardString)
+
+    val board1 = readBoard("sudoku1.txt", 10)
+    val board2 = readBoard("sudoku2.txt")
+    val board3 = readBoard("sudoku3.txt")
+    val boardString1 = boardToString(board1)
+    val boardString2 = boardToString(board2)
+    val boardString3 = boardToString(board3)
+    println(boardString1)
+    println(boardString2)
+    println(boardString3)
+
+    // val sol = solve(board)
+    // println(sol)
+
   }
 }
