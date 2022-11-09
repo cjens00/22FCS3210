@@ -11,17 +11,17 @@ import scala.io._
 object Sudoku {
 
   /** Returns a 2D array of Int representing a sudoku board given a filename. */
-  def readBoard(fileName: String): Array[Array[Int]] = {
+  def readBoard(fileName: String, boardSize: Int = 9): Array[Array[Int]] = {
     val bufferedSource = Source.fromFile(fileName)
-    val boardMtx: Array[Array[Int]] = Array.ofDim(9, 9)
+    val boardMtx: Array[Array[Int]] = Array.ofDim(boardSize, boardSize)
     val source = bufferedSource.getLines.mkString.filter(!_.equals(' '))
-    val validationPattern = "[0-9]{81}".r
+    val validationPattern = ("[0-9]" + s"{${math.pow(boardSize, 2).toInt}}").r
     source match {
       case validationPattern(_*) =>
         for {
-          i <- 0 to 8
-          j <- 0 to 8
-        } boardMtx(i)(j) = source(9 * i + j).asDigit
+          i <- 0 until boardSize
+          j <- 0 until boardSize
+        } boardMtx(i)(j) = source(boardSize * i + j).asDigit
       case _ => throw new IllegalArgumentException("Error reading board: invalid format")
     }
     boardMtx
