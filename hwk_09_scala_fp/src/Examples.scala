@@ -63,13 +63,26 @@ object Examples {
     (a to b).filter(isPrime)
   }
 
-  // OPTIONAL TODO #1: h) Goldbach's conjecture says that every positive even number greater than 2 is the sum of two prime numbers. Example: 28 = 5 + 23. It is one of the most famous facts in number theory that has not been proved to be correct in the general case. It has been numerically confirmed up to very large numbers. Write function goldbach that takes an integer and returns the two prime numbers that sum up to it.
-  def goldbach(x: Int) = {}
+  // Goldbach's conjecture says that every
+  //  positive even number greater than 2 is the sum of two prime numbers.
+  //  Example: 28 = 5 + 23. It is one of the most famous facts in number theory that
+  //  has not been proved to be correct in the general case.
+  //  It has been numerically confirmed up to very large numbers.
+  //  Write function goldbach that takes an integer and returns the two prime numbers that sum up to it.
+  def goldbach(x: Int): (Int, Int) = {
+    if (x > 2 && x % 2 == 0) {
+      val primeRange = primesRange(2, x - 2)
+      for (i <- primeRange.indices)
+        for (j <- primeRange.indices.drop(1))
+          if ((primeRange(i) + primeRange(j)).equals(x))
+            return Tuple2(primeRange(i), primeRange(j))
+    }
+    throw new IllegalArgumentException("Argument must be a positive integer greater than 2.")
+  }
 
   // OPTIONAL TODO #2: i) write the function goldbachList that takes a range of integers and returns a list of all even numbers and their Goldbach composition.
   def goldbachList(a: Int, b: Int) = {}
 
-  def main(args: Array[String]): Unit = {
-  }
+  def main(args: Array[String]): Unit = {}
 
 }

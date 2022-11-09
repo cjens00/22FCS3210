@@ -1,20 +1,41 @@
 /*
  * CS3210 - Principles of Programming Languages - Fall 2022
  * Instructor: Thyago Mota
+ * Student Name: Cameron Jensen
  * Description: Prg 02 - Sudoku Puzzle
  */
 
+import scala.collection.mutable
 import scala.io._
 
 object Sudoku {
 
-  // TODO #1: return an 2D array of Int representing a sudoku board given a filename
+  /** Returns a 2D array of Int representing a sudoku board given a filename. */
   def readBoard(fileName: String): Array[Array[Int]] = {
-    null
+    val bufferedSource = Source.fromFile(fileName)
+    val boardMtx: Array[Array[Int]] = Array.ofDim(9, 9)
+    val validationPattern = "[0-9]{81}".r
+    val source = bufferedSource.getLines.mkString.filter(!_.equals(' '))
+    source match {
+      case validationPattern(_*) =>
+        for {
+          i <- 0 to 8
+          j <- 0 to 8
+        } boardMtx(i)(j) = source(9 * i + j).asDigit
+      case _ => throw new IllegalArgumentException("Error reading board: invalid format")
+    }
+    boardMtx
   }
 
-  // TODO #2: return a String representation from a given sudoku board
-  def boardToString(board: Array[Array[Int]]): String = ""
+  /** Returns a String representation of a given sudoku board */
+  def boardToString(board: Array[Array[Int]]): String = {
+    val sb = new mutable.StringBuilder()
+    for (x <- board) {
+      x.foreach(y => sb.append(s"$y\t"))
+      sb.append('\n')
+    }
+    sb.toString
+  }
 
   // TODO #3: return a specific row from a sudoku board as a sequence of numbers
   def getRow(board: Array[Array[Int]], row: Int): Array[Int] = null
@@ -56,8 +77,10 @@ object Sudoku {
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = null
 
   def main(args: Array[String]): Unit = {
-    val board = readBoard("sudoku1.txt")
+    val inputFile = "sudoku1.txt"
+    val board = readBoard(inputFile)
     val sol = solve(board)
-    println(boardToString(sol))
+    val boardString = boardToString(board)
+    println(boardString)
   }
 }
