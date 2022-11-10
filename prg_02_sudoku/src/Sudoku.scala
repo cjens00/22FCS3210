@@ -53,8 +53,9 @@ object Sudoku {
 
   /** Returns true if the sequence is valid, that is, it contains 9 numbers in [0-9] with optionally repeating zeros. */
   def isValid(seq: Array[Int]): Boolean = {
+    val pattern = "[0-9]{9}".r
     seq.mkString match {
-      case "[0-9]{9}" => true
+      case pattern => true
       case _ => false
     }
   }
@@ -71,8 +72,14 @@ object Sudoku {
   // TODO #10: a board is valid if all of its rows, columns, and boxes are also valid
   def isValid(board: Array[Array[Int]]): Boolean = false
 
-  // TODO #11: a board is complete it there is no zero
-  def isComplete(board: Array[Array[Int]]): Boolean = false
+  /** Returns true if board is complete, that is, it contains no zeros. */
+  def isComplete(board: Array[Array[Int]]): Boolean = {
+    val pattern = "[0]+".r
+    board.flatten.mkString match {
+      case pattern => false
+      case _ => true
+    }
+  }
 
   // TODO #12: a board is solved if is complete and valid
   def isSolved(board: Array[Array[Int]]): Boolean = false
@@ -92,9 +99,13 @@ object Sudoku {
 
   def main(args: Array[String]): Unit = {
 
-    val board1 = readBoard("sudoku1.txt")
-    val board2 = readBoard("sudoku2.txt")
-    val board3 = readBoard("sudoku3.txt")
+    val boardInputFile1 = "sudoku1.txt"
+    val boardInputFile2 = "sudoku2.txt"
+    val boardInputFile3 = "sudoku3.txt"
+
+    val board1 = readBoard(boardInputFile1)
+    val board2 = readBoard(boardInputFile2)
+    val board3 = readBoard(boardInputFile3)
 
     val boardString1 = boardToString(board1)
     val boardString2 = boardToString(board2)
@@ -102,7 +113,12 @@ object Sudoku {
 
     println(boardString1)
     println("Print columns as sequences:")
+
     for (i <- board1.indices) println(formatStringFromArray(getCol(board1, i)))
+
+    println(s"isComplete(board1): ${isComplete(board1)}")
+    println(s"isComplete(board2): ${isComplete(board2)}")
+    println(s"isComplete(board3): ${isComplete(board3)}")
 
     // val sol = solve(board)
     // println(sol)
