@@ -51,8 +51,13 @@ object Sudoku {
   // TODO #5: return a specific box from a sudoku board as a sequence of numbers
   def getBox(board: Array[Array[Int]], x: Int, y: Int): Array[Int] = null
 
-  // TODO #6: a sequence is valid if it has 9 numbers in [0-9] with possibly repeated zeros
-  def isValid(seq: Array[Int]): Boolean = false
+  /** Returns true if the sequence is valid, that is, it contains 9 numbers in [0-9] with optionally repeating zeros. */
+  def isValid(seq: Array[Int]): Boolean = {
+    seq.mkString match {
+      case "[0-9]{9}" => true
+      case _ => false
+    }
+  }
 
   // TODO #7: return whether all rows of the given board are valid sequences
   def allRowsValid(board: Array[Array[Int]]): Boolean = false
