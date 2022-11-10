@@ -90,7 +90,6 @@ object Sudoku {
     arr.mkString("[", ", ", "]")
   }
 
-  /** This is where the magic happens. */
   def main(args: Array[String]): Unit = {
 
     val board1 = readBoard("sudoku1.txt")
