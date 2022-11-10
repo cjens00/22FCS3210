@@ -97,7 +97,7 @@ object Sudoku {
 
     println(boardString1)
     println("Print columns as sequences:")
-    for (i <- board1.indices) println(formatStringFromArray( getCol(board1, i) ) )
+    for (i <- board1.indices) println(formatStringFromArray(getCol(board1, i)))
 
     // val sol = solve(board)
     // println(sol)
