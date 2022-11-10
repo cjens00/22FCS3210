@@ -49,7 +49,9 @@ object Sudoku {
   }
 
   // TODO #5: return a specific box from a sudoku board as a sequence of numbers
-  def getBox(board: Array[Array[Int]], x: Int, y: Int): Array[Int] = null
+  def getBox(board: Array[Array[Int]], x: Int, y: Int): Array[Int] = {
+
+  }
 
   /** Returns true if the sequence is valid, that is, it contains 9 numbers in [0-9] with optionally repeating zeros. */
   def isValid(seq: Array[Int]): Boolean = {
@@ -71,6 +73,11 @@ object Sudoku {
 
   // TODO #10: a board is valid if all of its rows, columns, and boxes are also valid
   def isValid(board: Array[Array[Int]]): Boolean = false
+
+  def isSquare[A](board: Array[Array[A]]): Boolean = {
+    if (board.length.>(0)) board.length == board(0).length
+    else throw new IllegalArgumentException("Error: Board not or improperly initialized.")
+  }
 
   /** Returns true if board is complete, that is, it contains no zeros. */
   def isComplete(board: Array[Array[Int]]): Boolean = {
