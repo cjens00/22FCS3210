@@ -48,9 +48,18 @@ object Sudoku {
     board.transpose.apply(col)
   }
 
-  // TODO #5: return a specific box from a sudoku board as a sequence of numbers
+  /** Returns a specific box from a sudoku board as a sequence of numbers. */
   def getBox(board: Array[Array[Int]], x: Int, y: Int): Array[Int] = {
-
+    isSquare(board) match {
+      case true =>
+        val boxSize = math.sqrt(board.length).toInt
+        var box: Array[Array[Int]] = Array.ofDim(boxSize, boxSize)
+        box = board.slice(y * boxSize, y * boxSize + boxSize)
+        box.foreach(_.slice(x * boxSize, x * boxSize + boxSize))
+        box.flatten
+      case false => throw new Exception("Error: Expected a square integer matrix.")
+      case _ => throw new Exception("Error: Cannot determine squareness of matrix.")
+    }
   }
 
   /** Returns true if the sequence is valid, that is, it contains 9 numbers in [0-9] with optionally repeating zeros. */
