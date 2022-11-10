@@ -38,12 +38,12 @@ object Sudoku {
     sb.toString
   }
 
-  // Returns a specific row from a sudoku board as a sequence of numbers.
+  /** Returns a specific row from a sudoku board as a sequence of numbers. */
   def getRow(board: Array[Array[Int]], row: Int): Array[Int] = {
     board(row)
   }
 
-  // Return a specific column from a sudoku board as a sequence of numbers.
+  /** Return a specific column from a sudoku board as a sequence of numbers. */
   def getCol(board: Array[Array[Int]], col: Int): Array[Int] = {
     board.transpose.apply(col)
   }
@@ -90,6 +90,7 @@ object Sudoku {
     arr.mkString("[", ", ", "]")
   }
 
+  /** This is where the magic happens. */
   def main(args: Array[String]): Unit = {
 
     val board1 = readBoard("sudoku1.txt")
