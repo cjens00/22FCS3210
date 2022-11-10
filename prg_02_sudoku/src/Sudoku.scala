@@ -38,11 +38,15 @@ object Sudoku {
     sb.toString
   }
 
-  // TODO #3: return a specific row from a sudoku board as a sequence of numbers
-  def getRow(board: Array[Array[Int]], row: Int): Array[Int] = null
+  // Returns a specific row from a sudoku board as a sequence of numbers.
+  def getRow(board: Array[Array[Int]], row: Int): Array[Int] = {
+    board(row)
+  }
 
-  // TODO #4: return a specific column from a sudoku board as a sequence of numbers
-  def getCol(board: Array[Array[Int]], col: Int): Array[Int] = null
+  // Return a specific column from a sudoku board as a sequence of numbers.
+  def getCol(board: Array[Array[Int]], col: Int): Array[Int] = {
+    board.transpose.apply(col)
+  }
 
   // TODO #5: return a specific box from a sudoku board as a sequence of numbers
   def getBox(board: Array[Array[Int]], x: Int, y: Int): Array[Int] = null
@@ -77,20 +81,25 @@ object Sudoku {
   // TODO #15: return a solution to the puzzle (null if there is no solution)
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = null
 
+  def formatStringFromArray[A](arr: Array[A]): String = {
+    arr.mkString("[", ", ", "]")
+  }
+
   def main(args: Array[String]): Unit = {
 
-    val board1 = readBoard("sudoku1.txt", 10)
+    val board1 = readBoard("sudoku1.txt")
     val board2 = readBoard("sudoku2.txt")
     val board3 = readBoard("sudoku3.txt")
+
     val boardString1 = boardToString(board1)
     val boardString2 = boardToString(board2)
     val boardString3 = boardToString(board3)
+
     println(boardString1)
-    println(boardString2)
-    println(boardString3)
+    println("Print columns as sequences:")
+    for (i <- board1.indices) println(formatStringFromArray( getCol(board1, i) ) )
 
     // val sol = solve(board)
     // println(sol)
-
   }
 }
