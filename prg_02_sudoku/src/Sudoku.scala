@@ -53,9 +53,9 @@ object Sudoku {
 
   /** Returns true if the sequence is valid, that is, it contains 9 numbers in [0-9] with optionally repeating zeros. */
   def isValid(seq: Array[Int]): Boolean = {
-    val pattern = "[0-9]{9}".r
+    val pattern = raw"[0-9]{9}".r
     seq.mkString match {
-      case pattern => true
+      case pattern(_*) => true
       case _ => false
     }
   }
@@ -74,9 +74,10 @@ object Sudoku {
 
   /** Returns true if board is complete, that is, it contains no zeros. */
   def isComplete(board: Array[Array[Int]]): Boolean = {
-    val pattern = "[0]+".r
-    board.flatten.mkString match {
-      case pattern => false
+    val pattern = raw"[\s\S]+[0]+[\s\S]+".r
+    val flatBoardStr = board.flatten.mkString
+    flatBoardStr match {
+      case pattern(_*) => false
       case _ => true
     }
   }
