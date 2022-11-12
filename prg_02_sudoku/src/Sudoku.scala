@@ -62,6 +62,17 @@ object Sudoku {
     }
   }
 
+  /** Returns an array containing each box in board's array. */
+  def getAllBoxes(board: Array[Array[Int]]): Array[Array[Int]] = {
+    val dim = math.sqrt(board.length).toInt
+    val boxes: Array[Array[Int]] = Array.ofDim(board.length)
+    for {
+      x <- 0 until dim
+      y <- 0 until dim
+    } boxes(x * dim + y) = getBox(board, x, y)
+    boxes
+  }
+
   /** Returns true if the sequence is valid, that is, it contains 9 numbers in [0-9] with optionally repeating zeros. */
   def isValid(seq: Array[Int]): Boolean = {
     val patternCheckNumeric = raw"[0-9]{9}".r
@@ -123,17 +134,25 @@ object Sudoku {
     }
   }
 
-  // TODO #12: a board is solved if is complete and valid
-  def isSolved(board: Array[Array[Int]]): Boolean = false
+  /** True if the board is both complete and valid. */
+  def isSolved(board: Array[Array[Int]]): Boolean = {
+    if (isComplete(board) && isValid(board)) true else false
+  }
 
-  // TODO #13: return a new board configuration from the given one by setting a digit at a specific (row, col) location
-  def getChoice(board: Array[Array[Int]], row: Int, col: Int, d: Int): Array[Array[Int]] = null
+  /** Return a new board configuration from the given one by setting a digit at a specific (row, col) location. */
+  def getChoice(board: Array[Array[Int]], row: Int, col: Int, d: Int): Array[Array[Int]] = {
+    null
+  }
 
-  // TODO #14: return all possible new board configurations from the given one
-  def getChoices(board: Array[Array[Int]]): IndexedSeq[Array[Array[Int]]] = null
+  /** Return all possible new board configurations from the given one. */
+  def getChoices(board: Array[Array[Int]]): IndexedSeq[Array[Array[Int]]] = {
+    null
+  }
 
-  // TODO #15: return a solution to the puzzle (null if there is no solution)
-  def solve(board: Array[Array[Int]]): Array[Array[Int]] = null
+  /** Return a solution to the puzzle (null if there is no solution). */
+  def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
+    null
+  }
 
   /** Return a string formatted with all elements of array.
    * Note: Original in-line code provided by IntelliJ IDEA. */
