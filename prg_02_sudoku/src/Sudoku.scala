@@ -64,25 +64,50 @@ object Sudoku {
 
   /** Returns true if the sequence is valid, that is, it contains 9 numbers in [0-9] with optionally repeating zeros. */
   def isValid(seq: Array[Int]): Boolean = {
-    val pattern = raw"[0-9]{9}".r
-    seq.mkString match {
-      case pattern(_*) => true
+    val patternCheckNumeric = raw"[0-9]{9}".r
+    val matchString = seq.mkString
+    matchString match {
+      case patternCheckNumeric(_*) =>
+        val matchSet = matchString.toSet
+        if (matchSet.size.equals(9)) true
+        else if (matchString.count(_.equals('0')).equals(9 - matchSet.size))
+          true else false
       case _ => false
     }
   }
 
-  // TODO #7: return whether all rows of the given board are valid sequences
-  def allRowsValid(board: Array[Array[Int]]): Boolean = false
+  /** A board is valid if all of its rows, columns, and boxes are also valid. */
+  def isValid(board: Array[Array[Int]]): Boolean = {
+    if (allRowsValid(board) &&
+      allColsValid(board) &&
+      allBoxesValid(board))
+      true else false
+  }
 
-  // TODO #8: return whether all columns of the given board are valid sequences
-  def allColsValid(board: Array[Array[Int]]): Boolean = false
+  /** Returns true if all rows of the given board are valid sequences. */
+  def allRowsValid(board: Array[Array[Int]]): Boolean = {
+    for (row <- board) if (!isValid(row)) return false
+    true
+  }
 
-  // TODO #9: return whether all boxes of the given board are valid sequences
-  def allBoxesValid(board: Array[Array[Int]]): Boolean = false
+  /** Returns true if all columns of the given board are valid sequences. */
+  def allColsValid(board: Array[Array[Int]]): Boolean = {
+    for (i <- board.indices) if (!isValid(getCol(board, i))) return false
+    true
+  }
 
-  // TODO #10: a board is valid if all of its rows, columns, and boxes are also valid
-  def isValid(board: Array[Array[Int]]): Boolean = false
+  /** Return whether all boxes of the given board are valid sequences. */
+  def allBoxesValid(board: Array[Array[Int]]): Boolean = {
+    for {
+      x <- 0 until math.sqrt(board.length).toInt
+      y <- 0 until math.sqrt(board.length).toInt
+    } {
+      if (!isValid(getBox(board, x, y))) return false
+    }
+    true
+  }
 
+  /** Returns true if a Sudoku board is of size n x n. */
   def isSquare[A](board: Array[Array[A]]): Boolean = {
     if (board.length.>(0)) board.length == board(0).length
     else throw new IllegalArgumentException("Error: Board not or improperly initialized.")
@@ -110,8 +135,10 @@ object Sudoku {
   // TODO #15: return a solution to the puzzle (null if there is no solution)
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = null
 
-  def formatStringFromArray[A](arr: Array[A]): String = {
-    arr.mkString("[", ", ", "]")
+  /** Return a string formatted with all elements of array.
+   * Note: Original in-line code provided by IntelliJ IDEA. */
+  def formatStringFromArray[A](array: Array[A]): String = {
+    array.mkString("[", ", ", "]")
   }
 
   def main(args: Array[String]): Unit = {
