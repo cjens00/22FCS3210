@@ -141,16 +141,22 @@ object Sudoku {
 
   /** Return a new board configuration from the given one by setting a digit at a specific (row, col) location. */
   def getChoice(board: Array[Array[Int]], row: Int, col: Int, d: Int): Array[Array[Int]] = {
-    null
+    board(row)(col) = d
+    board
   }
 
   /** Return all possible new board configurations from the given one. */
   def getChoices(board: Array[Array[Int]]): IndexedSeq[Array[Array[Int]]] = {
-    null
+    val choices: IndexedSeq[Array[Array[Int]]] = null
+    // ===============================================
+    // Generate that shnozz!~
+    // ===============================================
+    choices
   }
 
   /** Return a solution to the puzzle (null if there is no solution). */
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
+    for (choice <- getChoices(board)) if (isSolved(choice)) return choice
     null
   }
 
