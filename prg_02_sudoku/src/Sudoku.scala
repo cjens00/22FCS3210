@@ -6,7 +6,9 @@
  */
 
 import scala.collection.mutable
+import scala.collection.mutable.ListBuffer
 import scala.io._
+import scala.util.chaining.scalaUtilChainingOps
 
 object Sudoku {
 
@@ -29,10 +31,13 @@ object Sudoku {
   }
 
   /** Returns a String representation of a given sudoku board */
-  def boardToString(board: Array[Array[Int]]): String = {
+  def boardToString(board: Array[Array[Int]], addWhitespace: Boolean = false): String = {
     val sb = new mutable.StringBuilder()
     for (x <- board) {
-      x.foreach(y => sb.append(s"$y\t"))
+      if (addWhitespace)
+        x.foreach(y => sb.append(s"$y\t"))
+      else
+        x.foreach(y => sb.append(s"$y"))
       sb.append('\n')
     }
     sb.toString
@@ -81,8 +86,8 @@ object Sudoku {
       case patternCheckNumeric(_*) =>
         val matchSet = matchString.toSet
         if (matchSet.size.equals(9)) true
-        else if (matchString.count(_.equals('0')).equals(9 - matchSet.size))
-          true else false
+        else if (matchString.toList.count(_.equals('0')).equals(9 - matchSet.size)) false
+        else true
       case _ => false
     }
   }
@@ -92,18 +97,21 @@ object Sudoku {
     if (allRowsValid(board) &&
       allColsValid(board) &&
       allBoxesValid(board))
-      true else false
+      true
+    else false
   }
 
   /** Returns true if all rows of the given board are valid sequences. */
   def allRowsValid(board: Array[Array[Int]]): Boolean = {
-    for (row <- board) if (!isValid(row)) return false
+    board.foreach { row => if (!isValid(row)) return false }
     true
   }
 
   /** Returns true if all columns of the given board are valid sequences. */
   def allColsValid(board: Array[Array[Int]]): Boolean = {
-    for (i <- board.indices) if (!isValid(getCol(board, i))) return false
+    board.indices.foreach { i =>
+      if (!isValid(getCol(board, i))) return false
+    }
     true
   }
 
@@ -136,22 +144,33 @@ object Sudoku {
 
   /** True if the board is both complete and valid. */
   def isSolved(board: Array[Array[Int]]): Boolean = {
-    if (isComplete(board) && isValid(board)) true else false
+    if (isComplete(board) && isValid(board)) true
+    else false
   }
 
   /** Return a new board configuration from the given one by setting a digit at a specific (row, col) location. */
   def getChoice(board: Array[Array[Int]], row: Int, col: Int, d: Int): Array[Array[Int]] = {
-    board(row)(col) = d
-    board
+    val newBoard = board.clone
+    newBoard(row)(col) = d
+    newBoard
   }
 
   /** Return all possible new board configurations from the given one. */
   def getChoices(board: Array[Array[Int]]): IndexedSeq[Array[Array[Int]]] = {
-    val choices: IndexedSeq[Array[Array[Int]]] = null
-    // ===============================================
-    // Generate that shnozz!~
-    // ===============================================
-    choices
+    var choices: ListBuffer[Array[Array[Int]]] = ListBuffer()
+    for {
+      x <- 1 to 9
+      y <- 1 to 9
+    } {
+      val row = getRow(board, x)
+      val col = getCol(board, y)
+      val box = getBox(board, x, y)
+      val validEntries = (1 to 9).filter(v =>
+        row.contains(v) || col.contains(v) || box.contains(v))
+      validEntries.foreach(choice =>
+        choices.append(getChoice(board, x, y, choice)))
+    }
+    choices.toIndexedSeq
   }
 
   /** Return a solution to the puzzle (null if there is no solution). */
@@ -167,28 +186,24 @@ object Sudoku {
   }
 
   def main(args: Array[String]): Unit = {
+    var boardInputFile = ""
+    if (args.length.equals(1)) boardInputFile = args(0)
+    else boardInputFile = "sudoku1.txt"
 
-    val boardInputFile1 = "sudoku1.txt"
+    val board = readBoard(boardInputFile)
+    val boardString = boardToString(board, addWhitespace = true)
+    println(boardString)
+    println(allRowsValid(board))
+    println(allColsValid(board))
+    println(allBoxesValid(board))
+
     val boardInputFile2 = "sudoku2.txt"
-    val boardInputFile3 = "sudoku3.txt"
-
-    val board1 = readBoard(boardInputFile1)
     val board2 = readBoard(boardInputFile2)
-    val board3 = readBoard(boardInputFile3)
+    println(allRowsValid(board2))
+    println(allColsValid(board2))
+    println(allBoxesValid(board2))
 
-    val boardString1 = boardToString(board1)
-    val boardString2 = boardToString(board2)
-    val boardString3 = boardToString(board3)
-
-    println(boardString1)
-    println("Print columns as sequences:")
-
-    for (i <- board1.indices) println(formatStringFromArray(getCol(board1, i)))
-
-    println(s"isComplete(board1): ${isComplete(board1)}")
-    println(s"isComplete(board2): ${isComplete(board2)}")
-    println(s"isComplete(board3): ${isComplete(board3)}")
-
+    // Original Code:
     // val sol = solve(board)
     // println(sol)
   }
