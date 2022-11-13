@@ -21,7 +21,7 @@ These sets are given by the Sudoku solving algorithm published by J.F. Crook.
 
 #### Crook's Sudoku Solving Algorithm Publication
 ```
-The algorithm used in this software was taken from this publication.
+The algorithm which may be used in this project was taken from this publication.
 
 From "Notices of The AMS" Vol. 56, #4 
 (Pages: 460 to 468)
