@@ -6,7 +6,7 @@
  */
 
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.io._
 import scala.util.chaining.scalaUtilChainingOps
 
@@ -55,16 +55,18 @@ object Sudoku {
 
   /** Returns a specific box from a sudoku board as a sequence of numbers. */
   def getBox(board: Array[Array[Int]], x: Int, y: Int): Array[Int] = {
-    isSquare(board) match {
-      case true =>
-        val boxSize = math.sqrt(board.length).toInt
-        var box: Array[Array[Int]] = Array.ofDim(boxSize, boxSize)
-        box = board.slice(y * boxSize, y * boxSize + boxSize)
-        box.foreach(_.slice(x * boxSize, x * boxSize + boxSize))
-        box.flatten
-      case false => throw new Exception("Error: Expected a square integer matrix.")
-      case _ => throw new Exception("Error: Cannot determine squareness of matrix.")
+    val boxLen = math.sqrt(board.length).toInt
+    val xBoxIndices = (0 to 8).filter(i =>
+      i >= (x / boxLen) * boxLen && i < (x / boxLen) * boxLen + boxLen)
+    val yBoxIndices = (0 to 8).filter(j =>
+      j >= (y / boxLen) * boxLen && j < (y / boxLen) * boxLen + boxLen)
+    val box: ArrayBuffer[Int] = ArrayBuffer()
+    for {
+      m <- xBoxIndices
+      n <- yBoxIndices
     }
+      box.append(board(m)(n))
+    box.toArray
   }
 
   /** Returns an array containing each box in board's array. */
@@ -157,25 +159,34 @@ object Sudoku {
 
   /** Return all possible new board configurations from the given one. */
   def getChoices(board: Array[Array[Int]]): IndexedSeq[Array[Array[Int]]] = {
-    var choices: ListBuffer[Array[Array[Int]]] = ListBuffer()
+    val choices: ListBuffer[Array[Array[Int]]] = ListBuffer()
     for {
-      x <- 1 to 9
-      y <- 1 to 9
+      x <- board.indices
+      y <- board.indices
     } {
-      val row = getRow(board, x)
-      val col = getCol(board, y)
-      val box = getBox(board, x, y)
-      val validEntries = (1 to 9).filter(v =>
-        row.contains(v) || col.contains(v) || box.contains(v))
-      validEntries.foreach(choice =>
-        choices.append(getChoice(board, x, y, choice)))
+      // TODO: Every choice is the same currently, at least after it hits a certain threshold.
+      //  I believe this is in the way the range is either filtered or ...idk
+      if (board(x)(y) != 0) {
+        val row = getRow(board, x)
+        val col = getCol(board, y)
+        val box = getBox(board, x, y)
+        val validEntries = (1 to 9).filter(v =>
+          !row.contains(v) || !col.contains(v) || !box.contains(v))
+        validEntries.foreach(choice =>
+          choices.append(getChoice(board, x, y, choice)))
+      }
     }
     choices.toIndexedSeq
   }
 
   /** Return a solution to the puzzle (null if there is no solution). */
-  def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
-    for (choice <- getChoices(board)) if (isSolved(choice)) return choice
+  def solve(board: Array[Array[Int]], counter: Int): Array[Array[Int]] = {
+    if (isSolved(board)) return board
+    println(s"Recursive iteration number: ${counter}")
+    val choices = getChoices(board)
+    if (counter == 100 || counter == 2000) choices.foreach(choice =>
+      println(boardToString(choice, addWhitespace = true)))
+    choices.foreach(choice => solve(choice, counter + 1))
     null
   }
 
@@ -186,25 +197,14 @@ object Sudoku {
   }
 
   def main(args: Array[String]): Unit = {
-    var boardInputFile = ""
-    if (args.length.equals(1)) boardInputFile = args(0)
-    else boardInputFile = "sudoku1.txt"
+    var board: Array[Array[Int]] = Array(Array())
+    if (args.length.equals(1)) board = readBoard(args(0))
+    else board = readBoard("algorithm/shortz301/board.txt")
 
-    val board = readBoard(boardInputFile)
-    val boardString = boardToString(board, addWhitespace = true)
-    println(boardString)
-    println(allRowsValid(board))
-    println(allColsValid(board))
-    println(allBoxesValid(board))
+    println(boardToString(board, addWhitespace = true))
+    println(formatStringFromArray(getBox(board, 8, 8)))
 
-    val boardInputFile2 = "sudoku2.txt"
-    val board2 = readBoard(boardInputFile2)
-    println(allRowsValid(board2))
-    println(allColsValid(board2))
-    println(allBoxesValid(board2))
-
-    // Original Code:
-    // val sol = solve(board)
-    // println(sol)
+    val sol = solve(board, 1)
+    println(boardToString(sol))
   }
 }
