@@ -8,6 +8,8 @@
 import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.io._
+import scala.collection.parallel.ParSeq
+import scala.collection.parallel.CollectionConverters._
 
 object Sudoku {
 
@@ -173,17 +175,13 @@ object Sudoku {
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
     if (isSolved(board)) return board
     val choices = getChoices(board)
-
     val partition = choices.partition(choice => choices.indexOf(choice) < (choices.length / 2.0).toInt)
     val subPartitionA = partition._1.partition(choice => choices.indexOf(choice) < (choices.length / 2.0).toInt)
     val subPartitionB = partition._2.partition(choice => choices.indexOf(choice) < (choices.length / 2.0).toInt)
-
-    subPartitionA._1.foreach(choice => solve(choice))
-    subPartitionA._2.foreach(choice => solve(choice))
-
-    subPartitionB._1.foreach(choice => solve(choice))
-    subPartitionB._2.foreach(choice => solve(choice))
-
+    val parallelSeqA = subPartitionA._1.foreach(choice => solve(choice))
+    val parallelSeqB = subPartitionA._2.foreach(choice => solve(choice))
+    val parallelSeqC = subPartitionB._1.foreach(choice => solve(choice))
+    val parallelSeqD = subPartitionB._2.foreach(choice => solve(choice))
     null
   }
 
