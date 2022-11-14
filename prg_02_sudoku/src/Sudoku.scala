@@ -8,7 +8,6 @@
 import scala.collection.mutable
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.io._
-import scala.util.chaining.scalaUtilChainingOps
 
 object Sudoku {
 
@@ -34,10 +33,8 @@ object Sudoku {
   def boardToString(board: Array[Array[Int]], addWhitespace: Boolean = false): String = {
     val sb = new mutable.StringBuilder()
     for (x <- board) {
-      if (addWhitespace)
-        x.foreach(y => sb.append(s"$y\t"))
-      else
-        x.foreach(y => sb.append(s"$y"))
+      if (addWhitespace) x.foreach(y => sb.append(s"$y\t"))
+      else x.foreach(y => sb.append(s"$y"))
       sb.append('\n')
     }
     sb.toString
@@ -128,12 +125,6 @@ object Sudoku {
     true
   }
 
-  /** Returns true if a Sudoku board is of size n x n. */
-  def isSquare[A](board: Array[Array[A]]): Boolean = {
-    if (board.length.>(0)) board.length == board(0).length
-    else throw new IllegalArgumentException("Error: Board not or improperly initialized.")
-  }
-
   /** Returns true if board is complete, that is, it contains no zeros. */
   def isComplete(board: Array[Array[Int]]): Boolean = {
     val pattern = raw"[\s\S]+[0]+[\s\S]+".r
@@ -152,6 +143,9 @@ object Sudoku {
 
   /** Return a new board configuration from the given one by setting a digit at a specific (row, col) location. */
   def getChoice(board: Array[Array[Int]], row: Int, col: Int, d: Int): Array[Array[Int]] = {
+    println(s"row=$row")
+    println(s"col=$col")
+    println(s"val=$d")
     val newBoard = board.clone
     newBoard(row)(col) = d
     newBoard
@@ -164,29 +158,25 @@ object Sudoku {
       x <- board.indices
       y <- board.indices
     } {
-      // TODO: Every choice is the same currently, at least after it hits a certain threshold.
-      //  I believe this is in the way the range is either filtered or ...idk
-      if (board(x)(y) != 0) {
+      if (board(x)(y) == 0) {
         val row = getRow(board, x)
         val col = getCol(board, y)
         val box = getBox(board, x, y)
         val validEntries = (1 to 9).filter(v =>
-          !row.contains(v) || !col.contains(v) || !box.contains(v))
-        validEntries.foreach(choice =>
-          choices.append(getChoice(board, x, y, choice)))
+          !row.contains(v) && !col.contains(v) && !box.contains(v))
+        validEntries.foreach(value => choices.append(getChoice(board, x, y, value)))
+        choices.foreach(choice => println(formatStringFromArray(choice(0))))
+        // for (i <- validEntries.indices) choices.append(getChoice())
       }
     }
     choices.toIndexedSeq
   }
 
   /** Return a solution to the puzzle (null if there is no solution). */
-  def solve(board: Array[Array[Int]], counter: Int): Array[Array[Int]] = {
+  def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
     if (isSolved(board)) return board
-    println(s"Recursive iteration number: ${counter}")
     val choices = getChoices(board)
-    if (counter == 100 || counter == 2000) choices.foreach(choice =>
-      println(boardToString(choice, addWhitespace = true)))
-    choices.foreach(choice => solve(choice, counter + 1))
+    choices.foreach(choice => solve(choice))
     null
   }
 
@@ -201,10 +191,7 @@ object Sudoku {
     if (args.length.equals(1)) board = readBoard(args(0))
     else board = readBoard("algorithm/shortz301/board.txt")
 
-    println(boardToString(board, addWhitespace = true))
-    println(formatStringFromArray(getBox(board, 8, 8)))
-
-    val sol = solve(board, 1)
+    val sol = solve(board)
     println(boardToString(sol))
   }
 }
