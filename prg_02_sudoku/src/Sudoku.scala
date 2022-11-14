@@ -16,7 +16,6 @@ object Sudoku {
     val bufferedSource = Source.fromFile(fileName)
     val boardMtx: Array[Array[Int]] = Array.ofDim(boardSize, boardSize)
     val source = bufferedSource.getLines.mkString.filter(!_.equals(' '))
-    // Good spot for a test- check that pattern match is working as expected
     val validationPattern = ("[0-9]" + s"{${math.pow(boardSize, 2).toInt}}").r
     source match {
       case validationPattern(_*) =>
@@ -31,6 +30,7 @@ object Sudoku {
 
   /** Returns a String representation of a given sudoku board */
   def boardToString(board: Array[Array[Int]], addWhitespace: Boolean = false): String = {
+    if (board == null) return "Null"
     val sb = new mutable.StringBuilder()
     for (x <- board) {
       if (addWhitespace) x.foreach(y => sb.append(s"$y\t"))
@@ -42,12 +42,15 @@ object Sudoku {
 
   /** Returns a specific row from a sudoku board as a sequence of numbers. */
   def getRow(board: Array[Array[Int]], row: Int): Array[Int] = {
-    board(row)
+    val aRow = Array.from(board(row))
+    aRow
   }
 
   /** Return a specific column from a sudoku board as a sequence of numbers. */
   def getCol(board: Array[Array[Int]], col: Int): Array[Int] = {
-    board.transpose.apply(col)
+    val transposed = board.transpose
+    val aCol = Array.from(transposed(col))
+    aCol
   }
 
   /** Returns a specific box from a sudoku board as a sequence of numbers. */
@@ -62,7 +65,7 @@ object Sudoku {
       m <- xBoxIndices
       n <- yBoxIndices
     }
-      box.append(board(m)(n))
+      box.append(board(m)(n).intValue)
     box.toArray
   }
 
@@ -127,12 +130,7 @@ object Sudoku {
 
   /** Returns true if board is complete, that is, it contains no zeros. */
   def isComplete(board: Array[Array[Int]]): Boolean = {
-    val pattern = raw"[\s\S]+[0]+[\s\S]+".r
-    val flatBoardStr = board.flatten.mkString
-    flatBoardStr match {
-      case pattern(_*) => false
-      case _ => true
-    }
+    !board.flatten.contains(0)
   }
 
   /** True if the board is both complete and valid. */
@@ -143,32 +141,31 @@ object Sudoku {
 
   /** Return a new board configuration from the given one by setting a digit at a specific (row, col) location. */
   def getChoice(board: Array[Array[Int]], row: Int, col: Int, d: Int): Array[Array[Int]] = {
-    println(s"row=$row")
-    println(s"col=$col")
-    println(s"val=$d")
-    val newBoard = board.clone
-    newBoard(row)(col) = d
-    newBoard
+    val choiceBoard = Array.from(board)
+    choiceBoard(row)(col) = d
+    choiceBoard
   }
 
   /** Return all possible new board configurations from the given one. */
   def getChoices(board: Array[Array[Int]]): IndexedSeq[Array[Array[Int]]] = {
     val choices: ListBuffer[Array[Array[Int]]] = ListBuffer()
-    for {
-      x <- board.indices
-      y <- board.indices
-    } {
-      if (board(x)(y) == 0) {
-        val row = getRow(board, x)
-        val col = getCol(board, y)
-        val box = getBox(board, x, y)
-        val validEntries = (1 to 9).filter(v =>
-          !row.contains(v) && !col.contains(v) && !box.contains(v))
-        validEntries.foreach(value => choices.append(getChoice(board, x, y, value)))
-        choices.foreach(choice => println(formatStringFromArray(choice(0))))
-        // for (i <- validEntries.indices) choices.append(getChoice())
+    for (y <- board.indices) {
+      val row = getRow(board, y)
+      for (x <- board.indices) {
+        if (board(y)(x) == 0) {
+          val col = getCol(board, x)
+          val box = getBox(board, x, y)
+          val validPredicate: Int => Boolean = v =>
+            !row.contains(v) && !col.contains(v) && !box.contains(v)
+          val validEntries = (1 to 9).filter(validPredicate)
+          val validChoices = ArrayBuffer(Array(Array[Int]())).init
+          for (entry <- validEntries)
+            validChoices.append(getChoice(board, x, y, entry))
+          choices.appendAll(validChoices)
+        }
       }
     }
+    for (anArray <- choices) println(anArray.flatten.count(_ == 0))
     choices.toIndexedSeq
   }
 
@@ -176,7 +173,17 @@ object Sudoku {
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
     if (isSolved(board)) return board
     val choices = getChoices(board)
-    choices.foreach(choice => solve(choice))
+
+    val partition = choices.partition(choice => choices.indexOf(choice) < (choices.length / 2.0).toInt)
+    val subPartitionA = partition._1.partition(choice => choices.indexOf(choice) < (choices.length / 2.0).toInt)
+    val subPartitionB = partition._2.partition(choice => choices.indexOf(choice) < (choices.length / 2.0).toInt)
+
+    subPartitionA._1.foreach(choice => solve(choice))
+    subPartitionA._2.foreach(choice => solve(choice))
+
+    subPartitionB._1.foreach(choice => solve(choice))
+    subPartitionB._2.foreach(choice => solve(choice))
+
     null
   }
 
