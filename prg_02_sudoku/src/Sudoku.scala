@@ -175,13 +175,8 @@ object Sudoku {
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
     if (isSolved(board)) return board
     val choices = getChoices(board)
-    val partition = choices.partition(choice => choices.indexOf(choice) < (choices.length / 2.0).toInt)
-    val subPartitionA = partition._1.partition(choice => choices.indexOf(choice) < (choices.length / 2.0).toInt)
-    val subPartitionB = partition._2.partition(choice => choices.indexOf(choice) < (choices.length / 2.0).toInt)
-    val parallelSeqA = subPartitionA._1.foreach(choice => solve(choice))
-    val parallelSeqB = subPartitionA._2.foreach(choice => solve(choice))
-    val parallelSeqC = subPartitionB._1.foreach(choice => solve(choice))
-    val parallelSeqD = subPartitionB._2.foreach(choice => solve(choice))
+    val parallelSeqA: ParSeq[Array[Array[Int]]] = ParSeq.fromSpecific(choices)
+    parallelSeqA.foreach(choice => solve(choice))
     null
   }
 
@@ -195,7 +190,6 @@ object Sudoku {
     var board: Array[Array[Int]] = Array(Array())
     if (args.length.equals(1)) board = readBoard(args(0))
     else board = readBoard("algorithm/shortz301/board.txt")
-
     val sol = solve(board)
     println(boardToString(sol))
   }
