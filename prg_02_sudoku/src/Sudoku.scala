@@ -5,11 +5,13 @@
  * Description: Prg 02 - Sudoku Puzzle
  */
 
-import scala.collection.mutable
+import scala.collection.immutable.Nil.flatten
+import scala.collection.{IterableFactory, mutable}
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 import scala.io._
 import scala.collection.parallel.ParSeq
 import scala.collection.parallel.CollectionConverters._
+import scala.util.chaining.scalaUtilChainingOps
 
 object Sudoku {
 
@@ -152,22 +154,23 @@ object Sudoku {
   def getChoices(board: Array[Array[Int]]): IndexedSeq[Array[Array[Int]]] = {
     val choices: ListBuffer[Array[Array[Int]]] = ListBuffer()
     for (y <- board.indices) {
-      val row = getRow(board, y)
       for (x <- board.indices) {
-        if (board(y)(x) == 0) {
-          val col = getCol(board, x)
-          val box = getBox(board, x, y)
+        if (board(y)(x) == 0)
+        {
+          val row = Array.from(getRow(board, y))
+          val col = Array.from(getCol(board, x))
+          val box = Array.from(getBox(board, y, x))
           val validPredicate: Int => Boolean = v =>
             !row.contains(v) && !col.contains(v) && !box.contains(v)
           val validEntries = (1 to 9).filter(validPredicate)
-          val validChoices = ArrayBuffer(Array(Array[Int]())).init
-          for (entry <- validEntries)
-            validChoices.append(getChoice(board, x, y, entry))
+          val validChoices = ListBuffer.from(validEntries.map(e =>
+            Array.from(getChoice(board, y, x, e))))
           choices.appendAll(validChoices)
+          validChoices.foreach(choice => print(s"[sum: ${ choice.flatten.sum }] "))
         }
+        if (y * x + x % 10 == 0) print("\n")
       }
     }
-    for (anArray <- choices) println(anArray.flatten.count(_ == 0))
     choices.toIndexedSeq
   }
 
@@ -175,8 +178,12 @@ object Sudoku {
   def solve(board: Array[Array[Int]]): Array[Array[Int]] = {
     if (isSolved(board)) return board
     val choices = getChoices(board)
+    // Without parallel execution causes stack overflow
+    // (not a great solution, but it works now nevertheless)
+    // Also added benefit of performance boost
     val parallelSeqA: ParSeq[Array[Array[Int]]] = ParSeq.fromSpecific(choices)
     parallelSeqA.foreach(choice => solve(choice))
+    println("returning null")
     null
   }
 
@@ -186,10 +193,16 @@ object Sudoku {
     array.mkString("[", ", ", "]")
   }
 
+  def integerRemapExponential(from: Range, to: Range, d: Int): Int = {
+    val s = 1
+    (-1 * s * math.pow(math.abs(from.min - from.max - s),
+      (d - to.max) / (to.min - to.max)) + from.max + s).toInt
+  }
+
   def main(args: Array[String]): Unit = {
     var board: Array[Array[Int]] = Array(Array())
     if (args.length.equals(1)) board = readBoard(args(0))
-    else board = readBoard("algorithm/shortz301/board.txt")
+    else board = readBoard("res/shortz301/board.txt")
     val sol = solve(board)
     println(boardToString(sol))
   }
