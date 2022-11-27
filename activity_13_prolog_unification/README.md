@@ -21,6 +21,7 @@ Which of the following queries are satisfied?  Where relevant, give all the vari
 ```
 elf(gabriel).  
 
+
 wizard('Merlin').  
 
 wizard(X).  
