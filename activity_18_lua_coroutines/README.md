@@ -1,6 +1,6 @@
 # Introduction
 
-Coroutines are functions that can have their execution suspended after a call to ***yield***. 
+Coroutines are functions that can have their execution suspended after a call to ***yield***. This feature is sometimes called **non-preemptive multitasking** where the tasks voluntarily yield so others can execute. 
 
 # Creation and States
 
@@ -67,22 +67,27 @@ To illustrate coroutines, study the example below that implements a version of t
 ```
 function producer()
     while true do
-        coroutine.yield(
-            io.read()
-        )    
+        local value = io.read()
+        if value == "" then 
+            break
+        end
+        coroutine.yield(value)    
     end
 end
 
-function consumer()
+function consumer(prd)
     while true do
         local status, value = coroutine.resume(prd)
+        if not value then
+            break
+        end
         print(value)
     end
 end
 
 prd = coroutine.create(producer)
 cns = coroutine.create(consumer)
-coroutine.resume(cns)
+coroutine.resume(cns, prd)
 ```
 
 # Iterators
