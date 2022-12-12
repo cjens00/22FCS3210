@@ -1,0 +1,216 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "activity_01_power"
+		},
+		{
+			"path": "activity_02_grammars"
+		},
+		{
+			"path": "activity_03_bnf"
+		},
+		{
+			"path": "activity_04_lexical"
+		},
+		{
+			"path": "activity_05_parser"
+		},
+		{
+			"path": "activity_06_storage_binding"
+		},
+		{
+			"path": "activity_07_scope"
+		},
+		{
+			"path": "activity_08_list_comp"
+		},
+		{
+			"path": "activity_09_fp1"
+		},
+		{
+			"path": "activity_10_fp2"
+		},
+		{
+			"path": "activity_11_fpjava"
+		},
+		{
+			"path": "activity_12_prolog_basics"
+		},
+		{
+			"path": "activity_13_prolog_unification"
+		},
+		{
+			"path": "activity_14_prolog_recursion"
+		},
+		{
+			"path": "activity_15_prolog_lists"
+		},
+		{
+			"path": "activity_16_prolog_dynamic"
+		},
+		{
+			"path": "activity_17_lua_basics"
+		},
+		{
+			"path": "activity_18_lua_coroutines"
+		},
+		{
+			"path": "activity_19_threads_java"
+		},
+		{
+			"path": "activity_20_threads_python"
+		},
+		{
+			"path": "activity_21_dining_philo"
+		},
+		{
+			"path": "activity_22_multithread_sort"
+		},
+		{
+			"path": "activity_23_rocket_sim"
+		},
+		{
+			"path": "activity_24_goroutines"
+		},
+		{
+			"path": "activity_25_kp_problem"
+		},
+		{
+			"path": "hwk_01_scala_basics"
+		},
+		{
+			"path": "hwk_02_diamond_problem"
+		},
+		{
+			"path": "hwk_03_grammars"
+		},
+		{
+			"path": "hwk_04_lexical"
+		},
+		{
+			"path": "hwk_05_leftrecursion"
+		},
+		{
+			"path": "hwk_06_iterators"
+		},
+		{
+			"path": "hwk_07_generators"
+		},
+		{
+			"path": "hwk_08_dynamic_scope"
+		},
+		{
+			"path": "hwk_09_scala_fp"
+		},
+		{
+			"path": "hwk_10_prolog_kb"
+		},
+		{
+			"path": "hwk_11_prolog_lists"
+		},
+		{
+			"path": "hwk_12_dining_philo"
+		},
+		{
+			"path": "prg_01_mouse"
+		},
+		{
+			"path": "prg_02_sudoku"
+		},
+		{
+			"path": "prg_03_es"
+		},
+		{
+			"path": "prg_04_elections_sim"
+		},
+		{
+			{
+				{
+					{
+						{
+							{
+								{
+									{
+										{
+											{
+												{
+													{
+														{
+															{
+																{
+																	{
+																		{
+																			{
+																				{
+																					{
+																						{
+																							{
+																								{
+																									{
+																										{
+																											{
+																												{
+																													{
+																														{
+																															{
+																																{
+																																	{
+																																		{
+																																			{
+																																				{
+																																					{
+																																						{
+																																							{
+																																								{
+																																									{
+																																										{
+																																											{
+																																												{}
+																																											},
+																																										},
+																																									},
+																																								},
+																																							},
+																																						},
+																																					},
+																																				},
+																																			},
+																																		},
+																																	},
+																																},
+																															},
+																														},
+																													},
+																												},
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	],
+	"settings": {}
+}
