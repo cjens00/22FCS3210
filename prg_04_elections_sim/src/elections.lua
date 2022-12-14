@@ -2,13 +2,15 @@
 -- Instructor: Thyago Mota
 -- Description: elections simulation with coroutines
 -- Student Name(s): Cameron Jensen
+-- Last Edited: 02:00, 12/14/2022
+
 PROPOSALS = 3
 VOTERS = 1000000
 
 function vote(ballot_box)
     local ballot = {}
     for i = 1, PROPOSALS do
-        table.insert(ballot, i, (math.random() >= 0.500))
+        table.insert(ballot, i, (math.random(0, 1)))
     end
     local startTime = os.clock()
     local voteTime = math.random(1, 10)
@@ -18,70 +20,79 @@ function vote(ballot_box)
         timeRemaining = voteTime - (os.clock() - startTime)
     end
     table.insert(ballot_box, #ballot_box + 1, ballot)
+    return math.maxinteger
 end
 
 function tally_results(ballot_box)
-    for i = 1, #ballot_box do
-        ballot_box[i] = tonumber(VOTERS / ballot_box[i])
+    local results = {}
+    for i = 1, PROPOSALS do
+        table.insert(results, i, 0)
     end
-    return ballot_box -- is this already a reference? check.
+    for i = 1, #ballot_box do
+        for j = 1, #ballot_box[i] do
+            if ballot_box[i][j] == 1 then
+                results[j] = results[j] + 1
+            end
+        end
+    end
+    for i = 1, #results do
+        results[i] = 100 / (VOTERS / results[i])
+    end
+    return results
 end
 
-function schedule_voters(voters)
-    -- Max number of voters allowed at once
-    local voter_capacity = 10000
-
-    -- Partition voters into groups 
-    -- of (max) size voter_capacity
-    local voter_groups = {}
-    local num_groups = (VOTERS / voter_capacity)
-    if VOTERS % voter_capacity > 0 then
-        num_groups = num_groups + 1
-    end
-    for i = 1, num_groups do
-        local from = i * voter_capacity
-        local to = math.min((i * voter_capacity) + voter_capacity, #voters)
-        voter_groups[i] = table.unpack(voters, from, to)
-    end
-
-    -- Get rid of duplicate (and unpartitioned) voters
-    voters = nil
-
-    -- Define the procedure for each group of voters
-    local sort_frequency = 10
+function schedule_voters(voters, ballot_box)
     local sort_by_time_remaining = function(ascending)
-        return function()
-            if ascending then
-            else
-            end
-        end
-    end
-    local start_voter_group = function(group_id)
-        local this_group = voter_groups[group_id]
-        for voter in this_group do
-            voter = {
-                voter = voter,
-                timeRem = 0
-            }
-        end
-        while #this_group > 0 do
-            for i = 1, #this_group do
-                if coroutine.status(this_group[i]) ~= "dead" then
-                    this_group[i].timeRem = coroutine.resume((this_group[i]))
+        ascending = ascending or true
+        if ascending then
+            return function(a, b)
+                if a == nil or a.timeRem == nil then
+                    return false
+                elseif b == nil or b.timeRem == nil then
+                    return true
                 else
-                    table.remove(this_group, i)
+                    return a.timeRem < b.timeRem
                 end
-                if i % (#this_group / sort_frequency) == 0 then
-                    table.sort(this_group, sort_by_time_remaining(true))
+            end
+        else
+            return function(a, b)
+                if a == nil or a.timeRem == nil then
+                    return false
+                elseif b == nil or b.timeRem == nil then
+                    return true
+                else
+                    return a.timeRem > b.timeRem
                 end
             end
         end
     end
 
-    -- Begin the group voting procedure, one group at a time
-    for i = 1, #voter_groups do
-        start_voter_group(group_id)
+    local ignore
+    for i = 1, #voters do
+        voters[i] = {
+            voter = voters[i],
+            timeRem = 0
+        }
+        ignore, voters[i].timeRem = coroutine.resume(voters[i].voter, ballot_box)
     end
+    ignore = nil
+
+    -- Sort the table by time remaining in the coroutine (ascending)
+    print(string.format("Sorting by time remaining (ascending)"))
+    local sort_wrapper = function()
+        table.sort(voters, sort_by_time_remaining())
+    end
+    pcall(sort_wrapper)
+    print(voters[#voters].timeRem)
+
+    local ignore
+    for i = 1, #voters do
+        while voters[i].timeRem ~= math.maxinteger do
+            ignore, voters[i].timeRem = coroutine.resume(voters[i].voter, ballot_box)
+        end
+    end
+    ignore = nil
+
 end
 
 function begin_election()
@@ -89,28 +100,31 @@ function begin_election()
     local startTime = os.clock()
 
     -- Create a ballot_box
-    local ballot_box = {
-        [1] = 0,
-        [2] = 0,
-        [3] = 0
-    }
+    local ballot_box = {}
 
     -- Create an array of "vote" coroutines
     local voters = {}
     for i = 1, VOTERS do
-        table.insert(voters, i, coroutine.create(vote(ballot_box)))
+        table.insert(voters, i, coroutine.create(vote))
     end
 
     -- Schedule the coroutines so each has a 
     -- fair chance of running until completion
-    schedule_voters(voters)
+    schedule_voters(voters, ballot_box)
 
     -- Show how long the election took 
     -- in seconds and display the results
     local results = tally_results(ballot_box)
-    local finishTime = os.clock() - startTime
-    local fStrResults = string.format("")
-    print(fStrResults)
+    local elapsedTime = os.clock() - startTime
+    local fStrResultsTable = {}
+    for i = 1, PROPOSALS do
+        table.insert(fStrResultsTable, i, string.format("Prop %d: %2.4f", i, results[i]))
+    end
+    local fStrTime = string.format("Time Elapsed: %2.3fs", elapsedTime)
+    for i = 1, #fStrResultsTable do
+        print(fStrResultsTable[i])
+    end
+    print(fStrTime)
 end
 
 -- Main below this line --
